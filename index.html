@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行领导力测评工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #1a237e;
+            border-bottom: 2px solid #4a148c;
+            padding-bottom: 10px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #4a148c;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .intro {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+        .element {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .element-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        .gold { background-color: #FFD700; }
+        .wood { background-color: #228B22; }
+        .water { background-color: #1E90FF; }
+        .fire { background-color: #FF4500; }
+        .earth { background-color: #CD853F; }
+        
+        .element-desc {
+            flex: 1;
+        }
+        .test-section {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .question {
+            margin-bottom: 30px;
+            display: none;
+        }
+        .question.active {
+            display: block;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .option {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background-color: #e9e9e9;
+        }
+        .option.selected {
+            background-color: #d1c4e9;
+            border-color: #7e57c2;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #4a148c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #7e57c2;
+        }
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4a148c;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .result-section {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            height: 300px;
+        }
+        .result-type {
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .result-detail {
+            margin-top: 20px;
+        }
+        .communication-tips {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .qr-code {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        #startTestBtn {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>五行领导力测评工具</h1>
+            <p>探索您的五行领导力特质</p>
+        </header>
+
+        <section class="intro">
+            <h2>测评介绍</h2>
+            <p>五行领导力测评基于中国传统五行理论（金、木、水、火、土），结合现代领导力研究，帮助您发现自己的领导风格特质和优势领域。</p>
+            
+            <p>本测评包含20道精心设计的问题，涵盖决策力、团队管理、应变能力等多个维度，通过分析您的回答，识别您的领导力类型。</p>
+            
+            <h3>五行领导力类型</h3>
+            <div class="element">
+                <div class="element-icon gold">金</div>
+                <div class="element-desc">
+                    <strong>金型领导力（刚毅决断·规则导向）</strong>：注重规则执行与果断决策，适合需要强管控的场景。“金曰从革”，引申为凡具有沉降、肃杀、收敛、清洁、发声等性质和作用的事物或现象均归属于金。
+                </div>
+            </div>
+            <div class="element">
+                <div class="element-icon wood">木</div>
+                <div class="element-desc">
+                    <strong>木型领导力（成长驱动·团队协作）</strong>：强调人才培养与团队协作，适合创新驱动型组织。“木曰曲直”，指木具有能屈能伸、向上向外舒展的特性，引申为凡具有生长、升发、伸展、舒畅等性质和作用的事物或现象，均归属于木。
+                </div>
+            </div>
+            <div class="element">
+                <div class="element-icon water">水</div>
+                <div class="element-desc">
+                    <strong>水型领导力（灵活应变·沟通协调）</strong>：擅长灵活应变与沟通，适合复杂多变的环境。“水曰润下”，指水具有滋润、下行的特性。引申为凡具有滋润、下行、寒冷、闭藏等性质和作用的事物或现象，均归属于水。
+                </div>
+            </div>
+            <div class="element">
+                <div class="element-icon fire">火</div>
+                <div class="element-desc">
+                    <strong>火型领导力（激情推动·目标导向）</strong>：注重目标达成与激情驱动，适合攻坚类任务。“火曰炎上”，炎上指火具有炎热、上升、光明的特性，引申为凡具有温热、升腾、明亮等性质和作用的事物或现象，均归属于火。
+                </div>
+            </div>
+            <div class="element">
+                <div class="element-icon earth">土</div>
+                <div class="element-desc">
+                    <strong>土型领导力（稳定包容·文化塑造）</strong>：重视稳定与文化塑造，适合长期战略落地。“土爱稼穑”，指土具有播种和收获，即孕育生机、长养万物的特性，故称土载四行，为万物之母。引申为凡具有生化、承载、受纳等性质和作用的事物或现象，均归属于土。
+                </div>
+            </div>
+            
+            <button id="startTestBtn" class="btn">开始测评</button>
+        </section>
+
+        <section class="qr-section">
+            <h2>扫码进入移动端测评</h2>
+            <p>使用手机扫描下方二维码，随时随地进行五行领导力测评</p>
+            <div class="qr-code" id="qrcode">
+                <p>二维码加载中...</p>
+            </div>
+            <p>扫描后可在手机上完成测评并获取详细分析报告</p>
+        </section>
+
+        <section class="test-section" id="testSection">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <h2>五行领导力测评</h2>
+            <p>请根据您的真实想法选择最符合您的选项</p>
+
+            <!-- 问题将通过JavaScript动态加载 -->
+            <div id="questionContainer"></div>
+
+            <button class="btn" id="prevBtn" disabled>上一题</button>
+            <button class="btn" id="nextBtn">下一题</button>
+        </section>
+
+        <section class="result-section" id="resultSection">
+            <h2>您的五行领导力分析报告</h2>
+            <div class="chart-container">
+                <canvas id="resultChart"></canvas>
+            </div>
+            <div class="result-type" id="resultType">
+                <h3>您的主导领导力类型：<span id="primaryType"></span></h3>
+                <p id="typeDescription"></p>
+            </div>
+            <div class="result-detail">
+                <h3>五行领导力详细分析</h3>
+                <div id="detailedAnalysis"></div>
+            </div>
+            <div class="communication-tips">
+                <h3>沟通建议</h3>
+                <h4>与上级沟通</h4>
+                <p id="upwardCommunication"></p>
+                <h4>与下属沟通</h4>
+                <p id="downwardCommunication"></p>
+            </div>
+            <button class="btn" id="restartBtn">重新测评</button>
+        </section>
+
+        <footer>
+            <p>© 2025 五行领导力测评工具 | 江苏交控人才集团版权所有</p>
+        </footer>
+    </div>
+
+    <!-- 引入Chart.js库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入Chart.js DataLabels插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <!-- 引入自定义脚本 -->
+    <script src="script.js"></script>
+</body>
+</html>
